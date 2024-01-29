@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Bash script to manage a process and its PID file
+
+handle_signal() {
+    case $1 in
+        SIGTERM|SIGQUIT)
+            echo "Deleting PID file and terminating"
+            rm -f /var/run/myscript.pid
+            exit 0
+            ;;
+        SIGINT)
+            echo "Y U no love me?!"
+            ;;
+        *)
+            echo "I hate the kill command"
+            ;;
+    esac
+}
+
+
+trap 'handle_signal SIGTERM' SIGTERM
+trap 'handle_signal SIGQUIT' SIGQUIT
+trap 'handle_signal SIGINT' SIGINT
+
+
+echo $$ > /var/run/myscript.pid
+
+while true; do
+    echo "To infinity and beyond"
+    sleep 1
+done

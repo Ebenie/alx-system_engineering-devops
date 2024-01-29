@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# This bash script to manage a process and its PID file
+
+start_process() {
+
+    if [ -f /var/run/my_process.pid ]; then
+        echo "Process already running."
+        exit 1
+    fi
+    
+
+    echo $$ > /var/run/my_process.pid
+    while true; do
+        echo "I am alive!" >> /tmp/my_process
+        sleep 2
+    done
+}
+
+
+stop_process() {
+
+    if [ ! -f /var/run/my_process.pid ]; then
+        echo "Process is not running."
+        exit 1
+    fi
+    
+
+    rm /var/run/my_process.pid
+    echo "manage_my_process stopped"
+}
+
+
+case "$1" in
+    start)
+        start_process
+        echo "manage_my_process started"
+        ;;
+    stop)
+        stop_process
+        ;;
+    restart)
+        stop_process
+        start_process
+        echo "manage_my_process restarted"
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0

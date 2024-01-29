@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# This bash (init) script to manage the manage_my_process script
+
+case "$1" in
+    start)
+        sudo ./manage_my_process start
+        ;;
+    stop)
+        sudo ./manage_my_process stop
+        ;;
+    restart)
+        sudo ./manage_my_process restart
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0
