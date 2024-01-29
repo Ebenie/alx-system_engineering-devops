@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# This script uses awk to parse Apache logs and extract IP and HTTP status code
+awk '{print $1, $9}' apache-access.log

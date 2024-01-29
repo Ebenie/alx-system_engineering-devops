@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script read /etc/passwd line by line and print user details
+IFS=":"
+
+while read -r username _ uid _ home shell; do
+    echo "The user $username is part of the $uid gang, lives in $home and rides $shell. $uid's place is protected by the passcode x, more info about the user here: $username"
+done < /etc/passwd
