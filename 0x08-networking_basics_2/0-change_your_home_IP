@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# This script changes the IP configuration for localhost and facebook.com
+
+sudo sed -i 's/127.0.0.1/127.0.0.2/g' /etc/hosts
+sudo sed -i 's/157.240.11.35/8.8.8.8/g' /etc/hosts
