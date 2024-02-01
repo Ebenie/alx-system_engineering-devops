@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# This script displays listening ports along with the PID and program name
+
+
+netstat -tuln | grep 'LISTEN' | awk '{print $4}' | awk -F':' '{print $NF}' | sort -n | uniq | while read -r port; do
+    pid=$(netstat -tuln | grep ":$port " | awk '{print $NF}' | awk -F'/' '{print $1}')
+    program=$(ps -p "$pid" -o comm=)
+    echo "Port: $port, PID: $pid, Program: $program"
+done

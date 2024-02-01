@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# TCP box: Transfers data slowly but reliably, UDP box: Transfers data quickly but may lose some. TCP worker: Asks if all data has been received.
+
+1
+2
+1
