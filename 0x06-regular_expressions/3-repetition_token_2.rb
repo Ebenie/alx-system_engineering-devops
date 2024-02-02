@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
-# This ruby script check if the argument is provided matches.
+# This script extracts patterns matching hbt+n from the input argume
 
-regex = /hbt*n/
-input = ARGV[0]
-matches = input.scan(regex)
-puts matches.join(",")
+matches = ARGV[0].scan(/hbt+n/)
+puts matches.join
