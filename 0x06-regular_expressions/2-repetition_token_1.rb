@@ -1,10 +1,15 @@
 #!/usr/bin/env ruby
 #This ruby script find regular expression to check if the argument is provided
 
-if ARGV.empty?
-  exit 1
-end
-regex = /hb+t*n/
-matches = ARGV[0].scan(regex)
 input = ARGV[0]
-puts input.match(regex)
+
+def match_regex(input)
+  regex = /hb+t*n/
+  return input.match(regex)
+end
+
+if input.nil?
+  puts "Please input a string."
+else
+  puts match_regex(input)
+end
