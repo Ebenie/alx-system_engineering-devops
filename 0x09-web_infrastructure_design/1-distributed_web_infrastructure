@@ -1,0 +1,23 @@
+1.	Why Adding Two Servers?
+•	Adding two servers increases redundancy and fault tolerance, reducing the risk of a single point of failure.
+2.	Why Adding a Load Balancer?
+•	Adding a load balancer helps distribute incoming traffic across multiple servers, improving performance and scalability.
+3.	Why Adding an Application Server?
+•	Adding an application server hosts and executes the application codebase, handling dynamic content generation.
+4.	Why Adding a Database?
+•	Adding a database stores and manages structured data for the website, facilitating data retrieval and manipulation.
+5.	Load Balancer Distribution Algorithm:
+•	The load balancer may use algorithms like Round Robin or Least Connections to distribute traffic evenly among the servers.
+6.	Load Balancer Setup:
+•	The load balancer can be configured for either Active-Active or Active-Passive setup.
+•	Active-Active: All servers actively handle traffic simultaneously.
+•	Active-Passive: One server actively handles traffic while the others remain on standby.
+7.	How Primary-Replica Database Cluster Works:
+•	In a Primary-Replica cluster, the primary database handles read and write operations, while the replica synchronizes data from the primary and serves as a backup.
+8.	Difference between Primary and Replica Node:
+•	The primary node handles read and write operations directly from the application, while the replica node synchronizes data from the primary and serves as a backup.
+9.	Issues with the Infrastructure:
+•	Single Point of Failure (SPOF) exists in the load balancer and each server.
+•	Security issues due to the absence of firewalls and HTTPS encryption.
+•	Lack of monitoring makes it challenging to detect and address issues promptly.
+

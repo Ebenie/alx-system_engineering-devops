@@ -1,0 +1,22 @@
+
+1.	Why Adding Three Firewalls?
+•	Adding three firewalls increases security by implementing multiple layers of protection to filter and control incoming and outgoing traffic.
+2.	Why Adding an SSL Certificate?
+•	Adding an SSL certificate encrypts traffic between the server and the user's browser, ensuring data privacy and security.
+3.	Why Adding Monitoring Clients?
+•	Adding monitoring clients enables proactive monitoring of the infrastructure's health, performance, and availability, allowing for timely detection and resolution of issues.
+4.	Firewalls Purpose:
+•	Firewalls are used to control and monitor incoming and outgoing network traffic based on predetermined security rules, protecting the network from unauthorized access and potential security threats.
+5.	HTTPS Traffic:
+•	Traffic is served over HTTPS to encrypt data transmitted between the server and the client, safeguarding sensitive information from interception and unauthorized access.
+6.	Monitoring Purpose:
+•	Monitoring is used to track the performance, availability, and health of the infrastructure components in real-time, allowing for proactive troubleshooting and optimization.
+7.	Monitoring Data Collection:
+•	Monitoring tools collect data by deploying monitoring agents or clients on each server, which gather metrics, logs, and other relevant information and send it to a centralized monitoring system or service for analysis.
+8.	Monitoring Web Server QPS:
+•	To monitor web server QPS (queries per second), you can configure monitoring tools to track and analyze incoming requests and responses, identifying patterns and trends in web traffic.
+9.	Issues with this Infrastructure:
+•	Terminating SSL at the load balancer level can be an issue as it adds an extra step in the communication process, potentially slowing down performance and increasing latency.
+•	Having only one MySQL server capable of accepting writes creates a single point of failure, risking data loss or downtime if the server fails.
+•	Having servers with all the same components might be a problem as it lacks redundancy and diversity, increasing the risk of a single point of failure across the entire infrastructure.
+
