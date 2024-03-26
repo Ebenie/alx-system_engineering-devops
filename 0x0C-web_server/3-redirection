@@ -1,33 +1,29 @@
 #!/usr/bin/env bash
+# Install nginx and modify Nginx configuration to listen on port 80
 
-# Install Nginx if not already installed
 apt-get update
 apt-get install -y nginx
 
-# Define the configuration file path
-nginx_conf="/etc/nginx/sites-available/default"
+sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
 
-# Define the redirection URL
-redirect_url="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+sudo sed -i '24i\       rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
 
-# Generate the sed command to replace the default server block with redirection
-sed_command="\\
-/server {\\
-    listen 80 default_server;\\
-    listen [::]:80 default_server;\\
-\\
-    server_name _;\\
-\\
-    location /redirect_me {\\
-        return 301 $redirect_url;\\
-    }\\
-}\\
-"
-
-# Apply the sed command to modify the Nginx configuration
-sed -i "/^server {/,$ d" "$nginx_conf"
-echo "$sed_command" >> "$nginx_conf"
-
-# Restart Nginx to apply changes
 service nginx restart
+
+echo "<!DOCTYPE html>
+<html>
+<head>
+<title>Hello World!</title>
+</head>
+<body>
+<h1>Hello World!</h1>
+</body>
+</html>" > /var/www/html/index.html
+
+curl -s localhost | grep -q "Hello World!"
+if [ $? -eq 0 ]; then
+    echo "Nginx is serving the correct content."
+else
+    echo "Error: Nginx is not serving the correct content."
+fi
 
