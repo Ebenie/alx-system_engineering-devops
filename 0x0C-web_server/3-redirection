@@ -1,29 +1,35 @@
 #!/usr/bin/env bash
-# Install nginx and modify Nginx configuration to listen on port 80
-
-apt-get update
-apt-get install -y nginx
-
-sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
-
-sudo sed -i '24i\       rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
-
-service nginx restart
-
-echo "<!DOCTYPE html>
-<html>
-<head>
-<title>Hello World!</title>
-</head>
-<body>
-<h1>Hello World!</h1>
-</body>
-</html>" > /var/www/html/index.html
-
-curl -s localhost | grep -q "Hello World!"
-if [ $? -eq 0 ]; then
-    echo "Nginx is serving the correct content."
-else
-    echo "Error: Nginx is not serving the correct content."
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null; then
+    echo "Installing Nginx..."
+    sudo apt update
+    sudo apt install -y nginx
 fi
+
+
+sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/redirect_me
+server {
+    listen 80;
+    server_name abenezer-abraham.tech;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+
+    location / {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF'
+
+
+sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+sudo nginx -t
+
+
+    service nginx restart
+
+echo "Nginx redirection configured successfully!"
 
