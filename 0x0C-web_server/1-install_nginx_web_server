@@ -4,27 +4,27 @@
 apt-get update
 apt-get install -y nginx
 
-# Check if nginx is running
-if ! pgrep nginx >/dev/null; then
-    echo "Nginx is not running. Exiting."
-    exit 1
+
+sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+
+service nginx restart
+
+echo "<!DOCTYPE html>
+<html>
+<head>
+<title>Hello World!</title>
+</head>
+<body>
+<h1>Hello World!</h1>
+</body>
+</html>" > /var/www/html/index.html
+
+
+curl -s localhost | grep -q "Hello World!"
+if [ $? -eq 0 ]; then
+    echo "Nginx is serving the correct content."
+else
+    echo "Error: Nginx is not serving the correct content."
 fi
-
-# Check if nginx is listening on port 80
-if ! nc -z localhost 80; then
-    echo "Nginx is not listening on port 80. Exiting."
-    exit 1
-fi
-
-
-echo "Hello World!" > /var/www/html/index.html
-
-
-if ! curl -s localhost | grep -q "Hello World!"; then
-    echo "Nginx is not serving the expected content. Exiting."
-    exit 1
-fi
-
-
-echo "Nginx installation and configuration completed successfully."
 
