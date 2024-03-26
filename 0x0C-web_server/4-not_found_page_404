@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# This script configures an Nginx server on Ubuntu to have a custom 404 page containing the string "Ceci n'est pas une page"
+
+
+if ! command -v nginx &>/dev/null; then
+    apt-get update
+    apt-get install -y nginx
+fi
+
+
+NOT_FOUND_CONFIG="/etc/nginx/sites-available/not_found"
+
+
+cat <<EOF >"$NOT_FOUND_CONFIG"
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    error_page 404 /not_found.html;
+    location = /not_found.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+}
+EOF
+
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/not_found.html >/dev/null
+
+
+ln -sf "$NOT_FOUND_CONFIG" /etc/nginx/sites-enabled/
+
+if nginx -t &>/dev/null; then
+
+    service nginx restart
+else
+    echo "Nginx configuration test failed. Please check your configuration."
+fi
