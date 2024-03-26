@@ -1,35 +1,33 @@
 #!/usr/bin/env bash
+
 # Install Nginx if not already installed
-if ! command -v nginx &> /dev/null; then
-    echo "Installing Nginx..."
-    sudo apt update
-    sudo apt install -y nginx
-fi
+apt-get update
+apt-get install -y nginx
 
+# Define the configuration file path
+nginx_conf="/etc/nginx/sites-available/default"
 
-sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/redirect_me
-server {
-    listen 80;
-    server_name abenezer-abraham.tech;
+# Define the redirection URL
+redirect_url="https://www.youtube.com/watch?v=QH2-TGUlwu4"
 
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
+# Generate the sed command to replace the default server block with redirection
+sed_command="\\
+/server {\\
+    listen 80 default_server;\\
+    listen [::]:80 default_server;\\
+\\
+    server_name _;\\
+\\
+    location /redirect_me {\\
+        return 301 $redirect_url;\\
+    }\\
+}\\
+"
 
+# Apply the sed command to modify the Nginx configuration
+sed -i "/^server {/,$ d" "$nginx_conf"
+echo "$sed_command" >> "$nginx_conf"
 
-    location / {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-}
-EOF'
-
-
-sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
-
-sudo nginx -t
-
-
-    service nginx restart
-
-echo "Nginx redirection configured successfully!"
+# Restart Nginx to apply changes
+service nginx restart
 
