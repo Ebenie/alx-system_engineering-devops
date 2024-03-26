@@ -4,9 +4,7 @@
 apt-get update
 apt-get install -y nginx
 
-
 sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
-
 
 service nginx restart
 
@@ -20,11 +18,9 @@ echo "<!DOCTYPE html>
 </body>
 </html>" > /var/www/html/index.html
 
-
 curl -s localhost | grep -q "Hello World!"
 if [ $? -eq 0 ]; then
     echo "Nginx is serving the correct content."
 else
     echo "Error: Nginx is not serving the correct content."
 fi
-
