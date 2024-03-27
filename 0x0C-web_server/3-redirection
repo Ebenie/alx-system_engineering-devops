@@ -1,27 +1,36 @@
 #!/usr/bin/env bash
-
-# Install and configure Nginx server:
-# Update package repositories, install Nginx, start the server,
-# allow HTTP traffic through the firewall, set permissions and ownership for web directories,
-# create a backup of the default index file, replace its content with "Hello World!",
-# and restart the Nginx server, indicating successful completion.
-
-echo -e "Installing updated versions of Nginx\n"
-sudo apt-get update -y -qq && \
-   sudo apt-get install nginx -y
-
-echo -e "\nStart the server\n"
-
-sudo service nginx start
-
-# allowing nginx on firewall
-sudo ufw allow 'Nginx HTTP'
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null; then
+    echo "Installing Nginx..."
+    sudo apt update
+    sudo apt install -y nginx
+fi
 
 
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
+sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/redirect_me
+server {
+    listen 80;
+    server_name abenezer-abraham.tech;
 
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
 
-sudo service nginx restart
+
+    location / {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF'
+
+
+sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+sudo nginx -t
+
+
+    service nginx restart
+
+echo "Nginx redirection configured successfully!"
+
+
