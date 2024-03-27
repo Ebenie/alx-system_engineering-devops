@@ -1,6 +1,6 @@
-exec { 'kill_killmenow_process':
-  command     => 'pkill killmenow',
-  onlyif      => 'pgrep killmenow',
-  refreshonly => true,
+# Define an exec resource to kill the process named "killmenow"
+exec { 'pkill':
+  command => 'pkill killmenow',
+
 }
 
