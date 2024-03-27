@@ -1,31 +1,17 @@
 #!/usr/bin/env bash
 
-# Install and configure Nginx server:
-# Update package repositories, install Nginx,
-# start the server, allow HTTP traffic through the firewall,
-# set permissions and ownership for web directories,
-# create a backup of the default index file,
-# replace its content with "Hello World!",
-# and restart the Nginx server
+# Update package index
+apt update
 
-echo -e "Installing updated versions of Nginx\n"
-sudo apt-get update -y -qq && \
-   sudo apt-get install nginx -y
+# Install nginx
+apt install nginx -y
 
-echo -e "\nStart the server\n"
+# Configure nginx to listen on port 80
+sed -i 's/^.*listen 80 default_server.*$/\tlisten 80 default_server;/g' /etc/nginx/sites-available/default
 
+# Restart nginx
+/etc/init.d/nginx restart
 
-sudo service nginx start
-
-sudo ufw allow 'Nginx HTTP'
-
-
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
-
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-
-echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
-
-sudo service nginx restart
+# Create a simple HTML file containing "Hello World!"
+echo "<html><body>Hello World!</body></html>" > /var/www/html/index.html
 
