@@ -13,8 +13,11 @@ sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/def
 # Restart nginx
 service nginx restart
 
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
+
 # Echo "Hello World!" to index.html
-echo -e "Hello World!" >> /var/www/html/index.html
+echo -e "Hello World!" > /var/www/html/index.html
 
 # Check if nginx is serving the correct content
 if curl -s localhost | grep -q "Hello World!"; then
@@ -22,4 +25,3 @@ if curl -s localhost | grep -q "Hello World!"; then
 else
     echo "Error: Nginx is not serving the correct content."
 fi
-
