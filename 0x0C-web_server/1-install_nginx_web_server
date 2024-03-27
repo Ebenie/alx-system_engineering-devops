@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 # Install nginx and modify Nginx configuration to listen on port 80
 
-sudo apt-get update
-sudo apt-get install -y nginx
+apt-get update
+apt-get -y install nginx
 
 sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
 
 service nginx restart
 
 echo "<!DOCTYPE html>
-<html>
 <head>
 </head>
 <body>
@@ -23,4 +22,3 @@ if [ $? -eq 0 ]; then
 else
     echo "Error: Nginx is not serving the correct content."
 fi
-
