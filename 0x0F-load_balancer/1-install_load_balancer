@@ -11,13 +11,13 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server web-01 156548-web-01:80 check
-    server web-02 156548-web-02:80 check
+    server web-01 156548-web-01 34.207.63.123:80 check
+    server web-02 156548-web-02 54.164.59.47:80 check
 EOF
 
 # Enable HAProxy to be managed via an init script
 sudo systemctl enable haproxy
 
 # Restart HAProxy to apply configuration changes
-sudo service haproxy restart
+sudo service haproxy reload
 
