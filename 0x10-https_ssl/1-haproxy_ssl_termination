@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# HAproxy configuration file (/etc/haproxy/haproxy.cfg)
+# Global settings
+global
+    log stdout format raw local0
+
+# Defaults settings
+defaults
+    log global
+    mode http
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+# Frontend configuration for SSL termination
+frontend www-frontend
+    bind *:443 ssl crt /etc/haproxy/certs/www.holberton.online.pem
+    reqadd X-Forwarded-Proto:\ https
+    default_backend www-backend
+
+# Backend configuration
+backend www-backend
+    server web-server1 127.0.0.1:80 check
+
+# HTTPS traffic redirect
+frontend http-frontend
+    bind *:80
+    redirect scheme https code 301 if !{ ssl_fc }
+
+# Custom error page
+errorfile 400 /etc/haproxy/errors/400.http
+errorfile 403 /etc/haproxy/errors/403.http
+errorfile 408 /etc/haproxy/errors/408.http
+errorfile 500 /etc/haproxy/errors/500.http
+errorfile 502 /etc/haproxy/errors/502.http
+errorfile 503 /etc/haproxy/errors/503.http
+errorfile 504 /etc/haproxy/errors/504.http
+
