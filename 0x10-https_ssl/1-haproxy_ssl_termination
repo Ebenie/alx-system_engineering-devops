@@ -42,9 +42,8 @@ backend http_back
     redirect scheme https if !{ ssl_fc }
 
 frontend https_front
-    bind *:443 ssl crt /etc/ssl/certs/www.abenezer-abraham.tech.pem
+    bind *:443 ssl crt /etc/letsencrypt/live/www.abenezer-abraham.tech/fullchain.pem
     default_backend https_back
 
 backend https_back
-    server 156548-web-01 34.207.63.123:443 check
-
+    server 156548-web-01 34.207.63.123:80 check
