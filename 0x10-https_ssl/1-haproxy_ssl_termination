@@ -1,38 +1,33 @@
 #!/usr/bin/env bash
 # HAproxy configuration file (/etc/haproxy/haproxy.cfg)
-# Global settings
 global
-    log stdout format raw local0
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
-# Defaults settings
 defaults
     log global
     mode http
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
 
-# Frontend configuration for SSL termination
-frontend www-frontend
-    bind *:443 ssl crt /etc/haproxy/certs/www.holberton.online.pem
-    reqadd X-Forwarded-Proto:\ https
-    default_backend www-backend
-
-# Backend configuration
-backend www-backend
-    server web-server1 127.0.0.1:80 check
-
-# HTTPS traffic redirect
-frontend http-frontend
+frontend www-http
     bind *:80
     redirect scheme https code 301 if !{ ssl_fc }
 
-# Custom error page
-errorfile 400 /etc/haproxy/errors/400.http
-errorfile 403 /etc/haproxy/errors/403.http
-errorfile 408 /etc/haproxy/errors/408.http
-errorfile 500 /etc/haproxy/errors/500.http
-errorfile 502 /etc/haproxy/errors/502.http
-errorfile 503 /etc/haproxy/errors/503.http
-errorfile 504 /etc/haproxy/errors/504.http
+frontend www-https
+    bind *:443 ssl crt /etc/ssl/private/www.abenezer-abraham.tech
+    reqadd X-Forwarded-Proto:\ https
+    default_backend www-backend
+
+backend www-backend
+    server web-01 34.207.63.123:80 check
 

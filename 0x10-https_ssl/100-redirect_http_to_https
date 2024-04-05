@@ -1,0 +1,20 @@
+
+frontend http_frontend
+    bind *:80
+    mode http
+    option forwardfor
+    reqadd X-Forwarded-Proto:\ http
+
+    acl secure dst_port eq 443
+    redirect scheme https code 301 if !secure
+
+frontend https_front
+    bind *:443 ssl crt /etc/ssl/private/www.abenezer-abraham.tech
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    server web-01 34.207.63.123:80 check
+    server web-02 54.164.59.47:80 check
+
