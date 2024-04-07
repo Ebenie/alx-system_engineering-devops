@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-sudo grep -q "listen 80 default_server;" /etc/nginx/sites-enabled/default || \
-sudo sed -i '/^server {/,/^listen \[::\]:80 default_server;/ s/^/        listen 80 default_server;\n/' /etc/nginx/sites-enabled/default
-sudo netstat -tuln | grep -q ":80" && sudo systemctl stop apache2
-sudo nginx -t -c /etc/nginx/nginx.conf &> /dev/null || sudo systemctl restart nginx
-sudo ufw status | grep -q "80/tcp" && sudo ufw allow 80/tcp
+# Check if Nginx is not running
+if service nginx status 2>&1 | grep -q "not running"; then
+    echo "Nginx is not running"
+fi
 
