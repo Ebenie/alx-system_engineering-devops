@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
-# Backup original Nginx configuration file
-# Replace 'user' directive in Nginx configuration to run as nginx user
-# Update Nginx configuration to listen on all active IPs on port 8080
-# Restart Nginx service to apply changes
-# Verify Nginx is running as nginx user
-# Verify Nginx is listening on port 8080
+# Stop nginx service if already running
+service nginx stop
 
-cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+# Modify nginx configuration to run as nginx user
+sed -i 's/user\s*[^;]*/user nginx;/g' /etc/nginx/nginx.conf
 
-sed -i 's/user\s\+\w\+/user nginx/g' /etc/nginx/nginx.conf
-sed -i '/^ *listen/ s/$/ default_server/' /etc/nginx/sites-available/default
+# Restart nginx service
+service nginx start
 
-service nginx restart
+# Check nginx process status
 ps auxff | grep ngin[x]
 
-nc -z 0 8080
-
+# Check if nginx is listening on port 8080
+nc -z 0 8080 && echo "nginx is listening on port 8080"
