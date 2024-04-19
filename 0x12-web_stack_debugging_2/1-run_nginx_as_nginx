@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # Stop nginx service if already running
 service nginx stop
 
