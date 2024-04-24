@@ -1,71 +1,40 @@
 #!/usr/bin/python3
+
 """
-Script to retrieve and display all employee TODO list progress from a REST API and export it to JSON.
+This script retrieves information about employees' TODO lists
+using a REST API and exports it to a JSON file.
 """
 
-import sys
 import requests
 import json
 
-
-def get_all_employees_todo_progress():
-    """
-    Retrieves and displays all employee TODO list progress from a REST API.
-
-    Returns:
-        dict: Dictionary containing tasks information for all employees.
-    """
-    base_url = 'https://jsonplaceholder.typicode.com/users'
+if __name__ == "__main__":
+    api_url = 'https://jsonplaceholder.typicode.com/todos'
+    
     try:
-        # Fetch all employees data
-        employees_response = requests.get(base_url)
-        employees_data = employees_response.json()
+        response = requests.get(api_url)
+        response.raise_for_status()
+        todos = response.json()
+
+        todo_dict = {}
+        for todo in todos:
+            user_id = str(todo['userId'])
+            task_info = {
+                "username": todo['userId'],
+                "task": todo['title'],
+                "completed": todo['completed']
+            }
+            if user_id in todo_dict:
+                todo_dict[user_id].append(task_info)
+            else:
+                todo_dict[user_id] = [task_info]
+
+        json_file = 'todo_all_employees.json'
+        with open(json_file, 'w') as file:
+            json.dump(todo_dict, file)
         
-        all_tasks = {}
-
-        for employee in employees_data:
-            employee_id = employee.get('id')
-            username = employee.get('username')
-            
-            user_todo_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-            todo_response = requests.get(user_todo_url)
-            todo_data = todo_response.json()
-            
-            tasks = []
-            for task in todo_data:
-                task_dict = {
-                    "username": username,
-                    "task": task.get('title'),
-                    "completed": task.get('completed')
-                }
-                tasks.append(task_dict)
-            
-            all_tasks[employee_id] = tasks
-
-        return all_tasks
+        print("JSON file '{}' has been created successfully.".format(json_file))
 
     except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+        print("Error: {}".format(e))
 
-
-def export_to_json(all_tasks):
-    """
-    Exports tasks data for all employees to JSON file.
-
-    Args:
-        all_tasks (dict): Dictionary containing tasks information for all employees.
-
-    Returns:
-        None
-    """
-    filename = "todo_all_employees.json"
-    with open(filename, mode='w') as file:
-        json.dump(all_tasks, file, indent=4)
-
-    print(f"Data exported to {filename}")
-
-
-if __name__ == "__main__":
-    all_tasks = get_all_employees_todo_progress()
-    export_to_json(all_tasks)
