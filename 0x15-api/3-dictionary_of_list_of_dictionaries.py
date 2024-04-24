@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
 """
-This script retrieves information about employees' TODO lists
-using a REST API and exports it to a JSON file.
+This script retrieves information about all employees' TODO list progress
+from a given REST API and exports it to a JSON file.
 """
 
+import sys
 import requests
 import json
 
