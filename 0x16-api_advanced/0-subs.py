@@ -1,29 +1,27 @@
 #!/usr/bin/python3
 """
-0-subs
+This module contains a function to fetch the number of subscribers for a specified subreddit from Reddit API.
 """
+
 import requests
 
+
 def number_of_subscribers(subreddit):
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    """
+    Retrieve the total number of subscribers for a given subreddit.
     
-    response = requests.get(url, headers=headers)
+    Args:
+        subreddit (str): The name of the subreddit.
+        
+    Returns:
+        int: The number of subscribers, or 0 if the subreddit is invalid.
+    """
+    api_url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    user_agent = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(api_url, headers=user_agent, allow_redirects=False)
     
-    if response.status_code != 200:
-        return 0
-    
-    data = response.json()
-    
-    if 'data' not in data or 'subscribers' not in data['data']:
-        return 0
-    
-    return data['data']['subscribers']
+    if response.status_code == 200:
+        subreddit_data = response.json()
+        return subreddit_data['data'].get('subscribers', 0)
+    return 0
 
-if __name__ == '__main__':
-    import sys
-
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        print("{:d}".format(number_of_subscribers(sys.argv[1])))
