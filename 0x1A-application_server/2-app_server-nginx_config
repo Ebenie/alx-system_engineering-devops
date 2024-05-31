@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-sudo ln -s /etc/nginx/sites-available/2-app_server-nginx_config /etc/nginx/sites-enabled/
-sudo service nginx restart
-
