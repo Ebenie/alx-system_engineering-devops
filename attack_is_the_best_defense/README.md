@@ -1,1 +1,0 @@
-attack_is_the_best_defense project solution in networking security and sniffing
